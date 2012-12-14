@@ -3,10 +3,11 @@ development:
   database: nerdword_dev
   min_messages: warning
   username: root
+  encoding: utf8
 
 test:
   adapter: postgresql
   database: nerdword_test
   min_messages: warning
   username: root
-
+  encoding: utf8
