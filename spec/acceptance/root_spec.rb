@@ -2,13 +2,11 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource "Root" do
-  include Rails.application.routes.url_helpers
+  include_context :routes
 
   header "Authorization", :basic_auth
 
   let(:basic_auth) { "Basic #{Base64.encode64("#{user.email}:password")}" }
-
-  let(:host) { "example.org" }
 
   let(:user) { User.create(:email => "eric@example.com", :password => "password") }
 

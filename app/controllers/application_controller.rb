@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::API
+  extend Letter
+
   class UserUnauthorizedError < StandardError; end
 
   before_filter do

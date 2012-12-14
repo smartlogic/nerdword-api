@@ -3,6 +3,8 @@ require 'bcrypt'
 class User < ActiveRecord::Base
   include BCrypt
 
+  has_and_belongs_to_many :games
+
   attr_accessible :email, :password
 
   def password
