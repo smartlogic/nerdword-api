@@ -1,0 +1,12 @@
+development:
+  adapter: postgresql
+  database: nerdword_dev
+  min_messages: warning
+  user: root
+
+test:
+  adapter: postgresql
+  database: nerdword_test
+  min_messages: warning
+  user: root
+
