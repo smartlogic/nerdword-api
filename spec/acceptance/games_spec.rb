@@ -34,7 +34,7 @@ resource "Games" do
     let(:game) { Game.create(:users => [user]) }
     let(:id) { game.id }
 
-    example_request "Listing all of your current games" do
+    example_request "Viewing a single game" do
       response_body.should be_json_eql({
         :_embedded => {
           :users => [{ :email => "eric@example.com" }]
