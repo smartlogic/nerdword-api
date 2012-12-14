@@ -16,6 +16,7 @@ resource "Root" do
     example_request "Root resource" do
       response_body.should be_json_eql({
         :_links => {
+          CoreRels.rel("games") => { :href => games_url(:host => host) },
           :self => { :href => root_url(:host => host) }
         }
       }.to_json)

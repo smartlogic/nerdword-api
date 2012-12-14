@@ -9,10 +9,18 @@ class ApplicationController < ActionController::API
     user = User.find_by_email(email)
     raise UserUnauthorizedError unless user
     raise UserUnauthorizedError unless user.password == password
+
+    @current_user = user
   end
 
   rescue_from UserUnauthorizedError do
     response.headers["WWW-Authenticate"] = %{Basic realm="Nerdword"}
     render :json => Root.new, :serializer => RootSerializer, :status => 401
+  end
+
+  private
+
+  def current_user
+    @current_user
   end
 end
