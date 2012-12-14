@@ -10,5 +10,5 @@ gem 'pg'
 group :test do
   gem 'json_spec'
   gem 'rspec-rails'
-  gem 'rspec_api_documentation'
+  gem 'rspec_api_documentation', :github => "zipmark/rspec_api_documentation"
 end
