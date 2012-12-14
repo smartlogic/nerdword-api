@@ -1,8 +1,12 @@
 class GameSerializer < ActiveModel::Serializer
-  attribute :_embedded
+  attributes :_embedded, :_links
 
   def _embedded
     { :users => users }
+  end
+
+  def _links
+    { :self => { :href => game_url(game) } }
   end
 
   private
