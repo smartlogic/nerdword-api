@@ -4,3 +4,7 @@ gem 'rails', '3.2.9'
 gem 'rails-api'
 
 gem 'pg'
+
+group :test do
+  gem 'rspec-rails'
+end
