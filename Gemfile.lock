@@ -54,6 +54,7 @@ GEM
     crack (0.3.1)
     diff-lcs (1.1.3)
     erubis (2.7.0)
+    haml (3.1.7)
     hike (1.2.1)
     i18n (0.6.1)
     journey (1.0.4)
@@ -74,10 +75,16 @@ GEM
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
+    rack-protection (1.3.2)
+      rack
     rack-ssl (1.3.2)
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
+    raddocs (0.1.3)
+      haml
+      json
+      sinatra
     rails (3.2.9)
       actionmailer (= 3.2.9)
       actionpack (= 3.2.9)
@@ -115,6 +122,10 @@ GEM
       rspec-core (~> 2.12.0)
       rspec-expectations (~> 2.12.0)
       rspec-mocks (~> 2.12.0)
+    sinatra (1.3.3)
+      rack (~> 1.3, >= 1.3.6)
+      rack-protection (~> 1.2)
+      tilt (~> 1.3, >= 1.3.3)
     sprockets (2.2.2)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -139,6 +150,7 @@ DEPENDENCIES
   json_spec
   letter
   pg
+  raddocs
   rails (= 3.2.9)
   rails-api
   rspec-rails
