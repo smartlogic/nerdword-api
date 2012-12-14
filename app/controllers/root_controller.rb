@@ -1,5 +1,5 @@
 class RootController < ApplicationController
   def index
-    render :json => {}
+    render :json => Root.new, :serializer => RootSerializer
   end
 end
