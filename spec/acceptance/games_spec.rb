@@ -17,6 +17,7 @@ resource "Games" do
                 :users => [{ :email => "eric@example.com" }]
               },
               :_links => {
+                CoreRels.rel("game_turns") => { :href => game_turns_url(game, :host => host) },
                 :self => { :href => game_url(game, :host => host) }
               }
             }
@@ -40,6 +41,7 @@ resource "Games" do
           :users => [{ :email => "eric@example.com" }]
         },
         :_links => {
+          CoreRels.rel("game_turns") => { :href => game_turns_url(game, :host => host) },
           :self => { :href => game_url(game, :host => host) }
         }
       }.to_json)
@@ -69,6 +71,7 @@ resource "Games" do
           ]
         },
         :_links => {
+          CoreRels.rel("game_turns") => { :href => game_turns_url(Game.first, :host => host) },
           :self => { :href => game_url(Game.first, :host => host) }
         }
       }.to_json)
