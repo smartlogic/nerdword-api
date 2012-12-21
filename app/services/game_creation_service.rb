@@ -6,5 +6,10 @@ class GameCreationService < Struct.new(:users)
       :users => users,
       :random_seed => Random.new.seed
     })
+
+    Turn.create({
+      :user => users.first,
+      :game => game
+    })
   end
 end

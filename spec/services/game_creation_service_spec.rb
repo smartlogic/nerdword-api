@@ -19,6 +19,11 @@ describe GameCreationService do
       :random_seed => 10
     }).and_return(game)
 
+    Turn.should_receive(:create).with({
+      :user => user_1,
+      :game => game
+    })
+
     service.perform
     service.game.should == game
   end
