@@ -4,6 +4,32 @@ require 'capybara/server'
 require 'forwardable'
 require 'client'
 
+Tile.send(:remove_const, :REGULAR_DISTRIBUTION)
+Tile::REGULAR_DISTRIBUTION = %w{
+  G I N O O T T
+  A E O Q R S U
+  A I M N O T U
+  A E F G I T O
+  D E E I L P V
+  A A B L Y
+  A A D D O
+  E E R
+  A C E H U
+  F I P R W
+  M O U
+  E I J L N
+  E S
+  D I N O
+  H R Z
+  A C E K T T W
+  f I S
+  a N B
+  E G N X
+  L R V
+  R S Y
+  E I
+}
+
 Capybara.server do |app, port|
   require 'rack/handler/thin'
   Thin::Logging.silent = true
@@ -38,6 +64,10 @@ root_resource = RootResource.load(player_1_client.get("/").body)
 games_link = root_resource.links.fetch("games")
 player_1_client.post(games_link, { :players => [player_2_email] }.to_json)
 
+
+user = User.find_by_email(player_1_email)
+game = user.games.first
+game.update_attributes(:random_seed => "0")
 
 # View the game
 root_resource = RootResource.load(player_1_client.get("/").body)
