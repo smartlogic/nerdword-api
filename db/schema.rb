@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(:version => 20121221191149) do
 
   create_table "turns", :force => true do |t|
     t.integer "game_id"
+    t.string  "move"
   end
 
   create_table "users", :force => true do |t|
