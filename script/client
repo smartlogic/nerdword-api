@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require File.expand_path('../../config/environment',  __FILE__)
 require 'capybara/server'
+require 'forwardable'
 
 Capybara.server do |app, port|
   require 'rack/handler/thin'
@@ -11,34 +12,62 @@ end
 server = Capybara::Server.new(Rails.application, 8888)
 server.boot
 
+class Client
+  extend Forwardable
+
+  def_delegators :connection, :basic_auth, :get, :post, :put, :delete
+
+  def connection
+    @connection ||= Faraday.new(:url => "http://localhost:8888") do |faraday|
+      faraday.request :url_encoded
+      faraday.use JsonMiddleware
+      faraday.adapter Faraday.default_adapter
+    end
+  end
+
+  class JsonMiddleware < Faraday::Middleware
+    def call(env)
+      env[:request_headers]["Accept"] = "application/json"
+      env[:request_headers]["Content-Type"] = "application/json"
+
+      @app.call(env)
+    end
+  end
+end
+
 puts "Server booted"
 
 player_1_email = "player-#{SecureRandom.hex(10)}@example.com"
 player_2_email = "player-#{SecureRandom.hex(10)}@example.com"
 password = "password"
 
-player_1 = User.create(:email => player_1_email, :password => password)
-player_2 = User.create(:email => player_2_email, :password => password)
+player_1_client = Client.new
 
-player_1_client = Faraday.new(:url => "http://localhost:8888") do |faraday|
-  faraday.request  :url_encoded
-  faraday.adapter  Faraday.default_adapter
+# Create player
+root_resource = JSON.parse(player_1_client.get("/").body)
+user_registration_url = root_resource["_links"]["http://nerdwordapp.com/rels/user-registration"]["href"]
+
+player_1_client.post(user_registration_url) do |req|
+  req.body = { :user => { :email => player_1_email, :password => password } }.to_json
 end
-player_1_client.basic_auth(player_1.email, password)
 
-player_2_client = Faraday.new(:url => "http://localhost:8888") do |faraday|
-  faraday.request  :url_encoded
-  faraday.adapter  Faraday.default_adapter
+player_1_client.basic_auth(player_1_email, password)
+
+player_2_client = Client.new
+
+# Create player
+root_resource = JSON.parse(player_2_client.get("/").body)
+user_registration_url = root_resource["_links"]["http://nerdwordapp.com/rels/user-registration"]["href"]
+
+player_2_client.post(user_registration_url) do |req|
+  req.body = { :user => { :email => player_2_email, :password => password } }.to_json
 end
-player_2_client.basic_auth(player_2.email, password)
+player_2_client.basic_auth(player_2_email, password)
 
+# Create the game
 root_resource = JSON.parse(player_1_client.get("/").body)
 games_link = root_resource["_links"]["http://nerdwordapp.com/rels/games"]["href"]
-
-player_1_client.post(games_link) do |req|
-  req.headers['Content-Type'] = 'application/json'
-  req.body = { :players => [player_2.email] }.to_json
-end
+player_1_client.post(games_link, { :players => [player_2_email] }.to_json)
 
 games_resource = JSON.parse(player_1_client.get(games_link).body)
 
