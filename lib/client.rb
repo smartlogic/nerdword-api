@@ -51,6 +51,11 @@ class RootResource < Resource
 end
 
 class GamesResource < Resource
+  extend Forwardable
+  include Enumerable
+
+  def_delegators :games, :each, :[]
+
   attr_accessor :games
 
   def initialize(attrs)
@@ -60,10 +65,32 @@ class GamesResource < Resource
 end
 
 class GameResource < Resource
-  attr_accessor :users
+  attr_accessor :users, :links
 
   def initialize(attrs)
     @users = attrs.fetch("_embedded", {}).fetch("users", []).map { |user_attrs| UserResource.new(user_attrs) }
+    @links = Links.new(attrs.fetch("_links"))
+  end
+end
+
+class TurnsResource < Resource
+  extend Forwardable
+  include Enumerable
+
+  def_delegators :turns, :each, :[]
+
+  attr_accessor :turns, :links
+
+  def initialize(attrs)
+    @turns = attrs.fetch("_embedded", {}).fetch("turns", []).map { |turn_attrs| TurnResource.new(turn_attrs) }
+    @links = Links.new(attrs.fetch("_links"))
+  end
+end
+
+class TurnResource < Resource
+  attr_accessor :links
+
+  def initialize(attrs)
     @links = Links.new(attrs.fetch("_links"))
   end
 end

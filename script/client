@@ -44,8 +44,8 @@ root_resource = RootResource.load(player_1_client.get("/").body)
 games_link = root_resource.links.fetch("games")
 games_resource = GamesResource.load(player_1_client.get(games_link).body)
 
-puts "Player 1 has #{games_resource.games.count} games"
-games_resource.games.each do |game|
+puts "Player 1 has #{games_resource.count} games"
+games_resource.each do |game|
   puts
   game.users.each do |user|
     puts "* #{user.email}"
@@ -58,11 +58,23 @@ root_resource = RootResource.load(player_2_client.get("/").body)
 games_link = root_resource.links.fetch("games")
 games_resource = GamesResource.load(player_2_client.get(games_link).body)
 
-puts "Player 2 has #{games_resource.games.count} games"
-games_resource.games.each do |game|
+puts "Player 2 has #{games_resource.count} games"
+games_resource.each do |game|
   puts
   game.users.each do |user|
     puts "* #{user.email}"
   end
   puts
 end
+
+
+# View first turn
+root_resource = RootResource.load(player_1_client.get("/").body)
+games_link = root_resource.links.fetch("games")
+games_resource = GamesResource.load(player_1_client.get(games_link).body)
+game_resource = GameResource.load(player_1_client.get(games_resource.first.links.fetch("self")).body)
+
+turns_link = game_resource.links.fetch("turns")
+turns_resource = TurnsResource.load(player_1_client.get(turns_link).body)
+
+puts "There are #{turns_resource.count} turns"
