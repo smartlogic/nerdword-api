@@ -41,6 +41,13 @@ end
 games_resource = JSON.parse(player_1_client.get(games_link).body)
 
 puts "Player 1 has #{games_resource["_embedded"]["games"].count} games"
+games_resource["_embedded"]["games"].each do |game|
+  puts
+  game["_embedded"]["users"].each do |user|
+    puts "* #{user["email"]}"
+  end
+  puts
+end
 
 root_resource = JSON.parse(player_2_client.get("/").body)
 games_link = root_resource["_links"]["http://nerdwordapp.com/rels/games"]["href"]
@@ -48,3 +55,10 @@ games_link = root_resource["_links"]["http://nerdwordapp.com/rels/games"]["href"
 games_resource = JSON.parse(player_2_client.get(games_link).body)
 
 puts "Player 2 has #{games_resource["_embedded"]["games"].count} games"
+games_resource["_embedded"]["games"].each do |game|
+  puts
+  game["_embedded"]["users"].each do |user|
+    puts "* #{user["email"]}"
+  end
+  puts
+end
