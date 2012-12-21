@@ -1,0 +1,50 @@
+require 'capybara/server'
+
+Capybara.server do |app, port|
+  require 'rack/handler/thin'
+  Thin::Logging.silent = true
+  Rack::Handler::Thin.run(app, :Port => port)
+end
+
+server = Capybara::Server.new(Rails.application, 8888)
+server.boot
+
+puts "Server booted"
+
+player_1_email = "player-#{SecureRandom.hex(10)}@example.com"
+player_2_email = "player-#{SecureRandom.hex(10)}@example.com"
+password = "password"
+
+player_1 = User.create(:email => player_1_email, :password => password)
+player_2 = User.create(:email => player_2_email, :password => password)
+
+player_1_client = Faraday.new(:url => "http://localhost:8888") do |faraday|
+  faraday.request  :url_encoded
+  faraday.adapter  Faraday.default_adapter
+end
+player_1_client.basic_auth(player_1.email, password)
+
+player_2_client = Faraday.new(:url => "http://localhost:8888") do |faraday|
+  faraday.request  :url_encoded
+  faraday.adapter  Faraday.default_adapter
+end
+player_2_client.basic_auth(player_2.email, password)
+
+root_resource = JSON.parse(player_1_client.get("/").body)
+games_link = root_resource["_links"]["http://nerdwordapp.com/rels/games"]["href"]
+
+player_1_client.post(games_link) do |req|
+  req.headers['Content-Type'] = 'application/json'
+  req.body = { :players => [player_2.email] }.to_json
+end
+
+games_resource = JSON.parse(player_1_client.get(games_link).body)
+
+puts "Player 1 has #{games_resource["_embedded"]["games"].count} games"
+
+root_resource = JSON.parse(player_2_client.get("/").body)
+games_link = root_resource["_links"]["http://nerdwordapp.com/rels/games"]["href"]
+
+games_resource = JSON.parse(player_2_client.get(games_link).body)
+
+puts "Player 2 has #{games_resource["_embedded"]["games"].count} games"

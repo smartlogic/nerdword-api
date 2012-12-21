@@ -9,6 +9,12 @@ gem 'letter'
 gem 'pg'
 gem 'raddocs'
 
+group :development do
+  gem 'capybara'
+  gem 'faraday'
+  gem 'thin'
+end
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'rspec_api_documentation', :github => "zipmark/rspec_api_documentation"
