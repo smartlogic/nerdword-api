@@ -6,6 +6,12 @@ GIT
       activemodel (>= 3.0)
 
 GIT
+  remote: git://github.com/smartlogic/nerdword.git
+  revision: 67d522539371e9e6cb097089ba49b658028d9745
+  specs:
+    nerdword (0.0.1)
+
+GIT
   remote: git://github.com/zipmark/rspec_api_documentation.git
   revision: 5293fe964b05a987a1c9eaffa2bbf2b1be7beb51
   specs:
@@ -181,6 +187,7 @@ DEPENDENCIES
   faraday
   json_spec
   letter
+  nerdword!
   pg
   raddocs
   rails (= 3.2.9)

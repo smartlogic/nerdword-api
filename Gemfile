@@ -6,6 +6,7 @@ gem 'rails-api'
 gem "active_model_serializers", :git => "git://github.com/rails-api/active_model_serializers.git"
 gem 'bcrypt-ruby'
 gem 'letter'
+gem 'nerdword', :github => 'smartlogic/nerdword'
 gem 'pg'
 gem 'raddocs'
 
