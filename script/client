@@ -41,34 +41,34 @@ player_1_email = "player-#{SecureRandom.hex(10)}@example.com"
 player_2_email = "player-#{SecureRandom.hex(10)}@example.com"
 password = "password"
 
-player_1_client = Client.new
 
 # Create player
+player_1_client = Client.new
 root_resource = JSON.parse(player_1_client.get("/").body)
 user_registration_url = root_resource["_links"]["http://nerdwordapp.com/rels/user-registration"]["href"]
 
-player_1_client.post(user_registration_url) do |req|
-  req.body = { :user => { :email => player_1_email, :password => password } }.to_json
-end
-
+player_1_client.post(user_registration_url, { :user => { :email => player_1_email, :password => password } }.to_json)
 player_1_client.basic_auth(player_1_email, password)
 
-player_2_client = Client.new
 
 # Create player
+player_2_client = Client.new
 root_resource = JSON.parse(player_2_client.get("/").body)
 user_registration_url = root_resource["_links"]["http://nerdwordapp.com/rels/user-registration"]["href"]
 
-player_2_client.post(user_registration_url) do |req|
-  req.body = { :user => { :email => player_2_email, :password => password } }.to_json
-end
+player_2_client.post(user_registration_url, { :user => { :email => player_2_email, :password => password } }.to_json)
 player_2_client.basic_auth(player_2_email, password)
+
 
 # Create the game
 root_resource = JSON.parse(player_1_client.get("/").body)
 games_link = root_resource["_links"]["http://nerdwordapp.com/rels/games"]["href"]
 player_1_client.post(games_link, { :players => [player_2_email] }.to_json)
 
+
+# View the game
+root_resource = JSON.parse(player_1_client.get("/").body)
+games_link = root_resource["_links"]["http://nerdwordapp.com/rels/games"]["href"]
 games_resource = JSON.parse(player_1_client.get(games_link).body)
 
 puts "Player 1 has #{games_resource["_embedded"]["games"].count} games"
@@ -80,9 +80,9 @@ games_resource["_embedded"]["games"].each do |game|
   puts
 end
 
+# View the game
 root_resource = JSON.parse(player_2_client.get("/").body)
 games_link = root_resource["_links"]["http://nerdwordapp.com/rels/games"]["href"]
-
 games_resource = JSON.parse(player_2_client.get(games_link).body)
 
 puts "Player 2 has #{games_resource["_embedded"]["games"].count} games"
