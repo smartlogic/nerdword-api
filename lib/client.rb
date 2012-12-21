@@ -88,9 +88,10 @@ class TurnsResource < Resource
 end
 
 class TurnResource < Resource
-  attr_accessor :links
+  attr_accessor :links, :user, :rack
 
   def initialize(attrs)
+    @user = UserResource.new(attrs.fetch("_embedded").fetch("user"))
     @links = Links.new(attrs.fetch("_links"))
   end
 end

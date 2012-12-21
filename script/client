@@ -78,3 +78,7 @@ turns_link = game_resource.links.fetch("turns")
 turns_resource = TurnsResource.load(player_1_client.get(turns_link).body)
 
 puts "There are #{turns_resource.count} turns"
+turns_resource.each do |turn|
+  puts "Current player's turn - #{turn.user.email}"
+  puts "Your rack - "
+end
