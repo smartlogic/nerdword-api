@@ -8,6 +8,8 @@ class RootSerializer < ActiveModel::Serializer
 
     if scope
       base_links[CoreRels.rel("games")] = { :href => games_url }
+    else
+      base_links[CoreRels.rel("user-registration")] = { :href => users_url }
     end
 
     base_links

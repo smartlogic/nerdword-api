@@ -3,6 +3,8 @@ Nerdword::Application.routes.draw do
     resources :turns, :only => [:index]
   end
 
+  resources :users, :only => [:create]
+
   match "/docs" => Raddocs::App, :anchor => false
 
   root :to => "root#index"

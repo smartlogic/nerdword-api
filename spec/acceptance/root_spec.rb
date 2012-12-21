@@ -27,7 +27,8 @@ resource "Root" do
       example_request "Root resource - unauthorized" do
         response_body.should be_json_eql({
           :_links => {
-            :self => { :href => root_url(:host => host) }
+            :self => { :href => root_url(:host => host) },
+            CoreRels.rel("user-registration") => { :href => users_url(:host => host) }
           }
         }.to_json)
         response_headers["WWW-Authenticate"].should == "Basic realm=\"Nerdword\""
