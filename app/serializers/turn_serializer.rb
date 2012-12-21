@@ -1,5 +1,9 @@
 class TurnSerializer < ActiveModel::Serializer
-  attributes :_embedded, :_links
+  attributes :_embedded, :_links, :rack
+
+  def rack
+    CurrentTurn.new(scope, game.users.game_order, game.random_seed.to_i, game.turns, @options[:randomness]).rack
+  end
 
   def _embedded
     { :user => user }
@@ -15,5 +19,9 @@ class TurnSerializer < ActiveModel::Serializer
 
   def user
     UserSerializer.new(turn.user)
+  end
+
+  def game
+    @options[:game]
   end
 end

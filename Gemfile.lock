@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: git://github.com/smartlogic/nerdword.git
-  revision: 67d522539371e9e6cb097089ba49b658028d9745
+  revision: 4ec42bfc06cf241e34e9bbf76d6e23d89ab0e6d5
   specs:
     nerdword (0.0.1)
 

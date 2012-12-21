@@ -1,19 +1,19 @@
 require 'pouch'
 require 'player'
-require 'board'
 
-class CurrentTurn < Struct.new(:user, :random_seed, :turns)
+class CurrentTurn < Struct.new(:user, :users, :random_seed, :turns, :randomness)
   def rack
-    pouch.draw(7).join
+    racks = users.inject({}) do |racks, user|
+      rack = []
+      Player.new(nil, pouch, rack).draw
+      racks.merge(user => rack.join)
+    end
+    racks[user]
   end
 
   private
 
   def pouch
-    @pouch ||= Pouch.new(Tile::REGULAR_DISTRIBUTION, Random.new(random_seed))
-  end
-  
-  def board
-    @board ||= Board.new(Hash.new(1))
+    @pouch ||= Pouch.new(Tile::REGULAR_DISTRIBUTION.dup, randomness.new(random_seed))
   end
 end

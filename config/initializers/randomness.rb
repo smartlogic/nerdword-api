@@ -1,0 +1,1 @@
+Rails.application.randomness = Random

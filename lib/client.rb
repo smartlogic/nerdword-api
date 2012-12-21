@@ -92,6 +92,7 @@ class TurnResource < Resource
 
   def initialize(attrs)
     @user = UserResource.new(attrs.fetch("_embedded").fetch("user"))
+    @rack = attrs.fetch("rack")
     @links = Links.new(attrs.fetch("_links"))
   end
 end

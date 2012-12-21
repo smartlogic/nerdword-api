@@ -3,6 +3,7 @@ require File.expand_path('../../config/environment',  __FILE__)
 require 'capybara/server'
 require 'forwardable'
 require 'client'
+require 'not_random'
 
 Tile.send(:remove_const, :REGULAR_DISTRIBUTION)
 Tile::REGULAR_DISTRIBUTION = %w{
@@ -29,6 +30,8 @@ Tile::REGULAR_DISTRIBUTION = %w{
   R S Y
   E I
 }
+
+Rails.application.randomness = NotRandom
 
 Capybara.server do |app, port|
   require 'rack/handler/thin'
@@ -65,10 +68,6 @@ games_link = root_resource.links.fetch("games")
 player_1_client.post(games_link, { :players => [player_2_email] }.to_json)
 
 
-user = User.find_by_email(player_1_email)
-game = user.games.first
-game.update_attributes(:random_seed => "0")
-
 # View the game
 root_resource = RootResource.load(player_1_client.get("/").body)
 games_link = root_resource.links.fetch("games")
@@ -98,7 +97,8 @@ games_resource.each do |game|
 end
 
 
-# View first turn
+# View first turn - Player 1
+puts "Player 1"
 root_resource = RootResource.load(player_1_client.get("/").body)
 games_link = root_resource.links.fetch("games")
 games_resource = GamesResource.load(player_1_client.get(games_link).body)
@@ -110,5 +110,21 @@ turns_resource = TurnsResource.load(player_1_client.get(turns_link).body)
 puts "There are #{turns_resource.count} turns"
 turns_resource.each do |turn|
   puts "Current player's turn - #{turn.user.email}"
-  puts "Your rack - "
+  puts "Your rack - #{turn.rack}"
+end
+
+# View first turn - Player 2
+puts "Player 2"
+root_resource = RootResource.load(player_2_client.get("/").body)
+games_link = root_resource.links.fetch("games")
+games_resource = GamesResource.load(player_2_client.get(games_link).body)
+game_resource = GameResource.load(player_2_client.get(games_resource.first.links.fetch("self")).body)
+
+turns_link = game_resource.links.fetch("turns")
+turns_resource = TurnsResource.load(player_2_client.get(turns_link).body)
+
+puts "There are #{turns_resource.count} turns"
+turns_resource.each do |turn|
+  puts "Current player's turn - #{turn.user.email}"
+  puts "Your rack - #{turn.rack}"
 end

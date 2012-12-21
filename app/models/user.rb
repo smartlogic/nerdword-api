@@ -7,6 +7,10 @@ class User < ActiveRecord::Base
 
   attr_accessible :email, :password
 
+  def self.game_order
+    order("games_users.id")
+  end
+
   def password
     @password ||= Password.new(password_hash)
   end
@@ -14,5 +18,9 @@ class User < ActiveRecord::Base
   def password=(new_password)
     @password = Password.create(new_password)
     self.password_hash = @password
+  end
+
+  def hash
+    id.hash
   end
 end

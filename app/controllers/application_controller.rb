@@ -12,6 +12,10 @@ class ApplicationController < ActionController::API
 
   private
 
+  def render(options)
+    super({ :scope => current_user }.merge(options))
+  end
+
   def current_user
     @current_user
   end
