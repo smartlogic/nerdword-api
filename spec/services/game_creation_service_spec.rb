@@ -9,10 +9,15 @@ describe GameCreationService do
 
   let(:game) { mock(:game) }
 
+  let(:random) { mock(:random, :seed => 10) }
+
   it "should create a new game" do
-    Game.should_receive(:new).and_return(game)
-    game.should_receive(:users=).with(users).and_return(users)
-    game.should_receive(:save)
+    Random.should_receive(:new).and_return(random)
+
+    Game.should_receive(:create).with({
+      :users => users,
+      :random_seed => 10
+    }).and_return(game)
 
     service.perform
     service.game.should == game

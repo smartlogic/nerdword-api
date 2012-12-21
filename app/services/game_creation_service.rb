@@ -1,11 +1,10 @@
 class GameCreationService < Struct.new(:users)
-  include ActiveModel::Validations
-
   attr_reader :game
 
   def perform
-    @game = Game.new
-    @game.users = users
-    @game.save
+    @game = Game.create({
+      :users => users,
+      :random_seed => Random.new.seed
+    })
   end
 end
