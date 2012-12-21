@@ -77,4 +77,47 @@ resource "Games" do
       }.to_json)
     end
   end
+
+  post "/games/:id" do
+    parameter :word, "Word you are playing"
+    parameter :row, "Row number"
+    parameter :column, "Column number"
+    parameter :direction, "horizontal or vertical"
+
+    let(:user_2) { User.create(:email => "sam@example.com") }
+    let(:game) do
+      gcs = GameCreationService.new([user, user_2], 10)
+      gcs.perform
+      gcs.game
+    end
+    let(:id) { game.id }
+
+    let(:word) { "CAT" }
+    let(:row) { 7 }
+    let(:column) { 7 }
+    let(:direction) { "horizontal" }
+
+    let(:raw_post) { { :move => params }.to_json }
+
+    example_request "Playing a move" do
+      response_body.should == ""
+      status.should == 204
+
+      client.get(response_headers["Location"], {}, headers)
+
+      p response_body
+
+      response_body.should be_json_eql({
+        :rack => "SECONDRACK",
+        :_embedded => {
+          :user => { :email => user_2.email }
+        },
+        :_links => {
+          :self => { :href => game_turn_url(game, game.turns.second, :host => host) }
+        }
+      }.to_json)
+
+      status.should == 200
+    end
+  end
 end

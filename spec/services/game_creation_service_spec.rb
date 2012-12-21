@@ -27,4 +27,20 @@ describe GameCreationService do
     service.perform
     service.game.should == game
   end
+
+  it "can inject the random seed" do
+    service = GameCreationService.new(users, 11)
+
+    Game.should_receive(:create).with({
+      :users => users,
+      :random_seed => 11
+    }).and_return(game)
+
+    Turn.should_receive(:create).with({
+      :user => user_1,
+      :game => game
+    })
+
+    service.perform
+  end
 end

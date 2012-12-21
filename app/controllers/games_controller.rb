@@ -16,4 +16,11 @@ class GamesController < ApplicationController
     service.perform
     head :created, :location => game_url(service.game)
   end
+
+  def play
+    service = GamePlayService.new(current_user, game, params[:move])
+    service.perform
+
+    head 204, :location => game_turn_url(game, service.next_turn)
+  end
 end
