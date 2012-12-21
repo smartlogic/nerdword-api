@@ -19,22 +19,17 @@ player_1_email = "player-#{SecureRandom.hex(10)}@example.com"
 player_2_email = "player-#{SecureRandom.hex(10)}@example.com"
 password = "password"
 
-
 # Create player
-player_1_client = Client.new
-root_resource = RootResource.load(player_1_client.get("/").body)
-user_registration_url = root_resource.links.fetch("user-registration")
+UserCreation.new(:email => player_1_email, :password => password).perform
 
-player_1_client.post(user_registration_url, { :user => { :email => player_1_email, :password => password } }.to_json)
+player_1_client = Client.new
 player_1_client.basic_auth(player_1_email, password)
 
 
 # Create player
-player_2_client = Client.new
-root_resource = RootResource.load(player_2_client.get("/").body)
-user_registration_url = root_resource.links.fetch("user-registration")
+UserCreation.new(:email => player_2_email, :password => password).perform
 
-player_2_client.post(user_registration_url, { :user => { :email => player_2_email, :password => password } }.to_json)
+player_2_client = Client.new
 player_2_client.basic_auth(player_2_email, password)
 
 

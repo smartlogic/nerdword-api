@@ -32,21 +32,11 @@ class Links
     @links = link_hash
   end
 
-  # Fetch out links not worrying about custom rels
-  #
-  # @param [String] link relation
-  #
-  # @return [String] href
   def fetch(link)
     link = CoreRels.rel(link) if !@links.has_key?(link)
     @links.fetch(link, {}).fetch("href", "")
   end
 
-  # Check if a link rel is included
-  #
-  # @param [String] link relation
-  #
-  # @return [Boolean]
   def has_link?(link)
     @links.has_key?(link) || @links.has_key?(CoreRels.rel(link))
   end
@@ -83,5 +73,24 @@ class UserResource < Resource
 
   def initialize(attrs)
     @email = attrs.fetch("email")
+  end
+end
+
+module ClientHelper
+  def client
+    @client ||= Client.new
+  end
+end
+
+class UserCreation < Struct.new(:attrs)
+  include ClientHelper
+
+  def perform
+    client.post(user_registration_url, { :user => attrs }.to_json)
+  end
+
+  def user_registration_url
+    root_resource = RootResource.load(client.get("/").body)
+    root_resource.links.fetch("user-registration")
   end
 end
