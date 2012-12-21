@@ -11,12 +11,9 @@ class GamesController < ApplicationController
   end
 
   def create
-    game = Game.new
-    game.users << current_user
-    params[:players].map do |player_email|
-      game.users << User.find_by_email(player_email)
-    end
-    game.save!
-    head :created, :location => game_url(game)
+    users = [current_user] + User.where(:email => params[:players])
+    service = GameCreationService.new(users)
+    service.perform
+    head :created, :location => game_url(service.game)
   end
 end
