@@ -140,14 +140,17 @@ def show_turns(client)
   root_resource = RootResource.load(client.get("/").body)
   games_link = root_resource.links.fetch("games")
   games_resource = GamesResource.load(client.get(games_link).body)
-  game_resource = GameResource.load(client.get(games_resource.first.links.fetch("self")).body)
+
+  response = client.get(games_resource.first.links.fetch("self"))
+  game_resource = GameResource.load(response.body)
 
   turns_link = game_resource.links.fetch("turns")
-  turns_resource = TurnsResource.load(client.get(turns_link).body)
+  response = client.get(turns_link)
+  puts "#{response.headers["x-runtime"].to_f * 1000}ms"
+  turns_resource = TurnsResource.load(response.body)
 
   puts "There are #{turns_resource.count} turns"
-  turns_resource.each do |turn|
-    puts "Current player's turn - #{turn.user.email}"
-    puts "Your rack - #{turn.rack}"
-  end
+  turn = turns_resource.turns.last
+  puts "Current player's turn - #{turn.user.email}"
+  puts "Your rack - #{turn.rack}"
 end

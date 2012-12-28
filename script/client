@@ -137,6 +137,8 @@ moves.each_with_index do |move, index|
   player = index % 2
   client = clients[index % 2]
 
+  puts
+  puts
   puts "Player #{player}"
   show_turns(client)
 
