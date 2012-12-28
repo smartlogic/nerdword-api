@@ -3,7 +3,11 @@ class CreateTurns < ActiveRecord::Migration
     create_table :turns do |t|
       t.integer :game_id
       t.integer :user_id
-      t.string :move, :default => ""
+
+      t.string :word
+      t.integer :col
+      t.integer :row
+      t.string :direction
 
       t.timestamp
     end
