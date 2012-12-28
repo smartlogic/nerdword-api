@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe CurrentTurn do
-  let(:current_turn) { CurrentTurn.new(user, users, random_seed, turns, Random) }
+describe CurrentState do
+  let(:current_turn) { CurrentState.new(user, users, random_seed, turns, Random) }
 
   let(:user) { mock(:user) }
   let(:user_2) { mock(:user) }
@@ -29,7 +29,7 @@ describe CurrentTurn do
         it "should load both racks" do
           current_turn.rack.should == "CATORRI"
 
-          current_turn = CurrentTurn.new(user_2, users, random_seed, turns, Random)
+          current_turn = CurrentState.new(user_2, users, random_seed, turns, Random)
           current_turn.rack.should == "SZFANIR"
         end
       end
@@ -42,7 +42,7 @@ describe CurrentTurn do
       it "should load the third turn racks" do
         current_turn.rack.should == "EAVTFLP"
 
-        current_turn = CurrentTurn.new(user_2, users, random_seed, turns, Random)
+        current_turn = CurrentState.new(user_2, users, random_seed, turns, Random)
         current_turn.rack.should == "AIBUEEO"
       end
     end
@@ -56,7 +56,7 @@ describe CurrentTurn do
       it "should load both scores" do
         current_turn.score.should == 0
 
-        current_turn = CurrentTurn.new(user_2, users, random_seed, turns, Random)
+        current_turn = CurrentState.new(user_2, users, random_seed, turns, Random)
         current_turn.score.should == 0
       end
     end
@@ -68,7 +68,7 @@ describe CurrentTurn do
       it "should load the third turn score" do
         current_turn.score.should == 57
 
-        current_turn = CurrentTurn.new(user_2, users, random_seed, turns, Random)
+        current_turn = CurrentState.new(user_2, users, random_seed, turns, Random)
         current_turn.score.should == 58
       end
     end
@@ -85,7 +85,7 @@ describe CurrentTurn do
       it "should load the third turn score" do
         current_turn.score.should == 59
 
-        current_turn = CurrentTurn.new(user_2, users, random_seed, turns, Random)
+        current_turn = CurrentState.new(user_2, users, random_seed, turns, Random)
         current_turn.score.should == 58
       end
     end

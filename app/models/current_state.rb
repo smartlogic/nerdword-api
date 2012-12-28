@@ -2,7 +2,7 @@ require 'pouch'
 require 'player'
 require 'board'
 
-class CurrentTurn < Struct.new(:user, :users, :random_seed, :turns, :randomness)
+class CurrentState < Struct.new(:user, :users, :random_seed, :turns, :randomness)
   def rack
     play_history
 
