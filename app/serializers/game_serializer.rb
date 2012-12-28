@@ -8,6 +8,7 @@ class GameSerializer < ActiveModel::Serializer
   def _links
     {
       CoreRels.rel("turns") => { :href => game_turns_url(game) },
+      CoreRels.rel("current-turn") => { :href => game_turn_url(game, game.current_turn) },
       :self => { :href => game_url(game) }
     }
   end

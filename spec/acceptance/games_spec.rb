@@ -6,7 +6,11 @@ resource "Games" do
   include_context :routes
 
   get "/games" do
-    let!(:game) { Game.create(:users => [user]) }
+    let!(:game) do
+      gcs = GameCreationService.new([user])
+      gcs.perform
+      gcs.game
+    end
 
     example_request "Listing all of your current games" do
       response_body.should be_json_eql({
@@ -18,6 +22,7 @@ resource "Games" do
               },
               :_links => {
                 CoreRels.rel("turns") => { :href => game_turns_url(game, :host => host) },
+                CoreRels.rel("current-turn") => { :href => game_turn_url(game, game.current_turn, :host => host) },
                 :self => { :href => game_url(game, :host => host) }
               }
             }
@@ -32,7 +37,11 @@ resource "Games" do
   end
 
   get "/games/:id" do
-    let(:game) { Game.create(:users => [user]) }
+    let(:game) do
+      gcs = GameCreationService.new([user])
+      gcs.perform
+      gcs.game
+    end
     let(:id) { game.id }
 
     example_request "Viewing a single game" do
@@ -42,6 +51,7 @@ resource "Games" do
         },
         :_links => {
           CoreRels.rel("turns") => { :href => game_turns_url(game, :host => host) },
+          CoreRels.rel("current-turn") => { :href => game_turn_url(game, game.current_turn, :host => host) },
           :self => { :href => game_url(game, :host => host) }
         }
       }.to_json)
@@ -72,6 +82,7 @@ resource "Games" do
         },
         :_links => {
           CoreRels.rel("turns") => { :href => game_turns_url(Game.first, :host => host) },
+          CoreRels.rel("current-turn") => { :href => game_turn_url(Game.first, Game.first.current_turn, :host => host) },
           :self => { :href => game_url(Game.first, :host => host) }
         }
       }.to_json)
