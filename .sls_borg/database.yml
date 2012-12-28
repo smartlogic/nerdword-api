@@ -2,12 +2,14 @@ development:
   adapter: postgresql
   database: nerdword_dev
   min_messages: warning
-  username: root
-  host: /tmp
+  host: localhost
+  username: postgres
+  password: password
 
 test:
   adapter: postgresql
   database: nerdword_test
   min_messages: warning
-  username: root
-  host: /tmp
+  host: localhost
+  username: postgres
+  password: password
