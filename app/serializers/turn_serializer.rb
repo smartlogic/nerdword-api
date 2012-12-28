@@ -2,7 +2,7 @@ class TurnSerializer < ActiveModel::Serializer
   attributes :_embedded, :_links, :rack
 
   def rack
-    CurrentState.new(scope, game.users.game_order, game.random_seed.to_i, game.turns, @options[:randomness]).rack
+    CurrentState.new(scope, game.users.game_order, game.random_seed.to_i, turns, @options[:randomness]).rack
   end
 
   def _embedded
@@ -23,5 +23,9 @@ class TurnSerializer < ActiveModel::Serializer
 
   def game
     @options[:game]
+  end
+
+  def turns
+    game.turns.order(:id).where("id < ?", turn.id)
   end
 end

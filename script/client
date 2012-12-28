@@ -4,6 +4,9 @@ require 'capybara/server'
 require 'forwardable'
 require 'client'
 require 'not_random'
+require 'direction'
+require 'move'
+require 'position'
 
 Tile.send(:remove_const, :REGULAR_DISTRIBUTION)
 Tile::REGULAR_DISTRIBUTION = %w{
@@ -30,6 +33,11 @@ Tile::REGULAR_DISTRIBUTION = %w{
   R S Y
   E I
 }
+
+class NotRandom
+  def initialize(seed = 0)
+  end
+end
 
 Rails.application.randomness = NotRandom
 
@@ -96,35 +104,43 @@ games_resource.each do |game|
   puts
 end
 
+moves = [
+  Move.new("TOOTING", Position.new(3, 7), Direction::HORIZONTAL),
+  Move.new("EQUATORS", Position.new(3, 3), Direction::VERTICAL),
+  Move.new("MOUNTAIN", Position.new(8, 4), Direction::VERTICAL),
+  Move.new("FOGIE", Position.new(7, 0), Direction::VERTICAL),
+  Move.new("LIVED", Position.new(7, 10), Direction::VERTICAL),
+  Move.new("BAA", Position.new(2, 8), Direction::VERTICAL),
+  Move.new("DOPED", Position.new(9, 1), Direction::VERTICAL),
+  Move.new("RELAY", Position.new(1, 5), Direction::VERTICAL),
+  Move.new("AHA", Position.new(0, 5), Direction::VERTICAL),
+  Move.new("PEWIT", Position.new(4, 10), Direction::VERTICAL),
+  Move.new("QUA", Position.new(3, 4), Direction::HORIZONTAL),
+  Move.new("FLINT", Position.new(0, 14), Direction::HORIZONTAL),
+  Move.new("MEOW", Position.new(1, 12), Direction::HORIZONTAL),
+  Move.new("REJOINED", Position.new(6, 13), Direction::HORIZONTAL),
+  Move.new("CHEZ", Position.new(12, 11), Direction::VERTICAL),
+  Move.new("WACKO", Position.new(5, 3), Direction::VERTICAL),
+  Move.new("fUZES", Position.new(10, 14), Direction::HORIZONTAL),
+  Move.new("BEN", Position.new(9, 9), Direction::VERTICAL),
+  Move.new("SEX", Position.new(10, 4), Direction::VERTICAL),
+  Move.new("VAR", Position.new(10, 8), Direction::VERTICAL),
+  Move.new("GYRO", Position.new(4, 1), Direction::HORIZONTAL),
+  Move.new("DEaLT", Position.new(9, 1), Direction::HORIZONTAL),
+  Move.new("SIR", Position.new(11, 5), Direction::VERTICAL),
+  Move.new("IT", Position.new(13, 0), Direction::HORIZONTAL)
+]
 
-# View first turn - Player 1
-puts "Player 1"
-root_resource = RootResource.load(player_1_client.get("/").body)
-games_link = root_resource.links.fetch("games")
-games_resource = GamesResource.load(player_1_client.get(games_link).body)
-game_resource = GameResource.load(player_1_client.get(games_resource.first.links.fetch("self")).body)
+clients = [player_1_client, player_2_client]
 
-turns_link = game_resource.links.fetch("turns")
-turns_resource = TurnsResource.load(player_1_client.get(turns_link).body)
+moves.each_with_index do |move, index|
+  player = index % 2
+  client = clients[index % 2]
 
-puts "There are #{turns_resource.count} turns"
-turns_resource.each do |turn|
-  puts "Current player's turn - #{turn.user.email}"
-  puts "Your rack - #{turn.rack}"
-end
+  puts "Player #{player}"
+  show_turns(client)
 
-# View first turn - Player 2
-puts "Player 2"
-root_resource = RootResource.load(player_2_client.get("/").body)
-games_link = root_resource.links.fetch("games")
-games_resource = GamesResource.load(player_2_client.get(games_link).body)
-game_resource = GameResource.load(player_2_client.get(games_resource.first.links.fetch("self")).body)
-
-turns_link = game_resource.links.fetch("turns")
-turns_resource = TurnsResource.load(player_2_client.get(turns_link).body)
-
-puts "There are #{turns_resource.count} turns"
-turns_resource.each do |turn|
-  puts "Current player's turn - #{turn.user.email}"
-  puts "Your rack - #{turn.rack}"
+  puts "Player #{player} move"
+  puts "- Playing #{move.word}"
+  PlayMove.new(client, move.word, move.position.col, move.position.row, move.direction).perform
 end

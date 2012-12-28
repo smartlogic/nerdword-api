@@ -123,3 +123,31 @@ class UserCreation < Struct.new(:attrs)
     root_resource.links.fetch("user-registration")
   end
 end
+
+class PlayMove < Struct.new(:client, :word, :column, :row, :direction)
+  def perform
+    root_resource = RootResource.load(client.get("/").body)
+    games_link = root_resource.links.fetch("games")
+    games_resource = GamesResource.load(client.get(games_link).body)
+    game_link = games_resource.first.links.fetch("self")
+    client.post(game_link, {
+      :move => { :word => word, :row => row, :column => column, :direction => direction }
+    }.to_json)
+  end
+end
+
+def show_turns(client)
+  root_resource = RootResource.load(client.get("/").body)
+  games_link = root_resource.links.fetch("games")
+  games_resource = GamesResource.load(client.get(games_link).body)
+  game_resource = GameResource.load(client.get(games_resource.first.links.fetch("self")).body)
+
+  turns_link = game_resource.links.fetch("turns")
+  turns_resource = TurnsResource.load(client.get(turns_link).body)
+
+  puts "There are #{turns_resource.count} turns"
+  turns_resource.each do |turn|
+    puts "Current player's turn - #{turn.user.email}"
+    puts "Your rack - #{turn.rack}"
+  end
+end
