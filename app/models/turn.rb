@@ -10,7 +10,7 @@ class Turn < ActiveRecord::Base
 
   def move
     if word
-      Move.new(word, Position.new(col, row), direction)
+      Nerdword::Move.new(word, Nerdword::Position.new(col, row), direction)
     end
   end
 end

@@ -6,7 +6,7 @@ describe Game do
   # save the move in the current turn
   # create next turn
   describe "#play" do
-    let(:move) { Move.new("GAME", Position.new(0, 1), Direction::HORIZONTAL) }
+    let(:move) { Nerdword::Move.new("GAME", Nerdword::Position.new(0, 1), Nerdword::Direction::HORIZONTAL) }
 
     let(:user) { User.create }
     let(:user_2) { User.create }

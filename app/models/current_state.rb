@@ -1,7 +1,3 @@
-require 'pouch'
-require 'player'
-require 'board'
-
 class CurrentState < Struct.new(:user, :users, :random_seed, :turns, :randomness)
   def rack
     play_history
@@ -36,15 +32,15 @@ class CurrentState < Struct.new(:user, :users, :random_seed, :turns, :randomness
   def players
     @players ||= users.map do
       rack = []
-      { :player => Player.new(board, pouch, rack), :rack => rack }
+      { :player => Nerdword::Player.new(board, pouch, rack), :rack => rack }
     end
   end
 
   def board
-    @board ||= Board.new(Hash.new(1))
+    @board ||= Nerdword::Board.new(Hash.new(1))
   end
 
   def pouch
-    @pouch ||= Pouch.new(Tile::REGULAR_DISTRIBUTION.dup, randomness.new(random_seed))
+    @pouch ||= Nerdword::Pouch.new(Tile::REGULAR_DISTRIBUTION.dup, randomness.new(random_seed))
   end
 end

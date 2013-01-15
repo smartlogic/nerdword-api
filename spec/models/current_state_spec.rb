@@ -12,8 +12,8 @@ describe CurrentState do
   let(:turn_2) { stub(:turn_2, :user => user_2, :move => move_2) }
   let(:turn_3) { stub(:turn_3, :user => user, :move => nil) }
 
-  let(:move_1) { Move.new("CATORRI", Position.new(0, 0), Direction::HORIZONTAL) }
-  let(:move_2) { Move.new("ISZFANRI", Position.new(6, 0), Direction::VERTICAL) }
+  let(:move_1) { Nerdword::Move.new("CATORRI", Nerdword::Position.new(0, 0), Nerdword::Direction::HORIZONTAL) }
+  let(:move_2) { Nerdword::Move.new("ISZFANRI", Nerdword::Position.new(6, 0), Nerdword::Direction::VERTICAL) }
 
   describe "#rack" do
     context "first turn" do
@@ -77,7 +77,7 @@ describe CurrentState do
       let(:turn_3) { stub(:turn_2, :user => user, :move => move_3) }
       let(:turn_4) { stub(:turn_2, :user => user_2, :move => nil) }
 
-      let(:move_3) { Move.new("AT", Position.new(1, 0), Direction::VERTICAL) }
+      let(:move_3) { Nerdword::Move.new("AT", Nerdword::Position.new(1, 0), Nerdword::Direction::VERTICAL) }
 
       let(:turns) { [turn_1, turn_2, turn_3, turn_4] }
       let(:users) { [user, user_2] }

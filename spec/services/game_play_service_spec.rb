@@ -9,11 +9,11 @@ describe GamePlayService do
     :word => "CAT",
     :row => 7,
     :column => 7,
-    :direction => Direction::HORIZONTAL
+    :direction => Nerdword::Direction::HORIZONTAL
   } }
 
   it "plays a move" do
-    move = Move.new("CAT", Position.new(7, 7), Direction::HORIZONTAL)
+    move = Nerdword::Move.new("CAT", Nerdword::Position.new(7, 7), Nerdword::Direction::HORIZONTAL)
     game.should_receive(:play).with(user, move)
     service.perform
   end
