@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.9'
+gem 'rails', '3.2.11'
 gem 'rails-api'
 
 gem "active_model_serializers", :git => "git://github.com/rails-api/active_model_serializers.git"
