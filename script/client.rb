@@ -3,10 +3,10 @@ require File.expand_path('../../config/environment',  __FILE__)
 require 'capybara/server'
 require 'forwardable'
 require 'client'
-require 'not_random'
-require 'direction'
-require 'move'
-require 'position'
+require 'nerdword/not_random'
+require 'nerdword/direction'
+require 'nerdword/move'
+require 'nerdword/position'
 
 Tile.send(:remove_const, :REGULAR_DISTRIBUTION)
 Tile::REGULAR_DISTRIBUTION = %w{
@@ -34,12 +34,12 @@ Tile::REGULAR_DISTRIBUTION = %w{
   E I
 }
 
-class NotRandom
+class Nerdword::NotRandom
   def initialize(seed = 0)
   end
 end
 
-Rails.application.randomness = NotRandom
+Rails.application.randomness = Nerdword::NotRandom
 
 Capybara.server do |app, port|
   require 'rack/handler/thin'
@@ -105,30 +105,30 @@ games_resource.each do |game|
 end
 
 moves = [
-  Move.new("TOOTING", Position.new(3, 7), Direction::HORIZONTAL),
-  Move.new("EQUATORS", Position.new(3, 3), Direction::VERTICAL),
-  Move.new("MOUNTAIN", Position.new(8, 4), Direction::VERTICAL),
-  Move.new("FOGIE", Position.new(7, 0), Direction::VERTICAL),
-  Move.new("LIVED", Position.new(7, 10), Direction::VERTICAL),
-  Move.new("BAA", Position.new(2, 8), Direction::VERTICAL),
-  Move.new("DOPED", Position.new(9, 1), Direction::VERTICAL),
-  Move.new("RELAY", Position.new(1, 5), Direction::VERTICAL),
-  Move.new("AHA", Position.new(0, 5), Direction::VERTICAL),
-  Move.new("PEWIT", Position.new(4, 10), Direction::VERTICAL),
-  Move.new("QUA", Position.new(3, 4), Direction::HORIZONTAL),
-  Move.new("FLINT", Position.new(0, 14), Direction::HORIZONTAL),
-  Move.new("MEOW", Position.new(1, 12), Direction::HORIZONTAL),
-  Move.new("REJOINED", Position.new(6, 13), Direction::HORIZONTAL),
-  Move.new("CHEZ", Position.new(12, 11), Direction::VERTICAL),
-  Move.new("WACKO", Position.new(5, 3), Direction::VERTICAL),
-  Move.new("fUZES", Position.new(10, 14), Direction::HORIZONTAL),
-  Move.new("BEN", Position.new(9, 9), Direction::VERTICAL),
-  Move.new("SEX", Position.new(10, 4), Direction::VERTICAL),
-  Move.new("VAR", Position.new(10, 8), Direction::VERTICAL),
-  Move.new("GYRO", Position.new(4, 1), Direction::HORIZONTAL),
-  Move.new("DEaLT", Position.new(9, 1), Direction::HORIZONTAL),
-  Move.new("SIR", Position.new(11, 5), Direction::VERTICAL),
-  Move.new("IT", Position.new(13, 0), Direction::HORIZONTAL)
+  Nerdword::Move.new("TOOTING", Nerdword::Position.new(3, 7), Nerdword::Direction::HORIZONTAL),
+  Nerdword::Move.new("EQUATORS", Nerdword::Position.new(3, 3), Nerdword::Direction::VERTICAL),
+  Nerdword::Move.new("MOUNTAIN", Nerdword::Position.new(8, 4), Nerdword::Direction::VERTICAL),
+  Nerdword::Move.new("FOGIE", Nerdword::Position.new(7, 0), Nerdword::Direction::VERTICAL),
+  Nerdword::Move.new("LIVED", Nerdword::Position.new(7, 10), Nerdword::Direction::VERTICAL),
+  Nerdword::Move.new("BAA", Nerdword::Position.new(2, 8), Nerdword::Direction::VERTICAL),
+  Nerdword::Move.new("DOPED", Nerdword::Position.new(9, 1), Nerdword::Direction::VERTICAL),
+  Nerdword::Move.new("RELAY", Nerdword::Position.new(1, 5), Nerdword::Direction::VERTICAL),
+  Nerdword::Move.new("AHA", Nerdword::Position.new(0, 5), Nerdword::Direction::VERTICAL),
+  Nerdword::Move.new("PEWIT", Nerdword::Position.new(4, 10), Nerdword::Direction::VERTICAL),
+  Nerdword::Move.new("QUA", Nerdword::Position.new(3, 4), Nerdword::Direction::HORIZONTAL),
+  Nerdword::Move.new("FLINT", Nerdword::Position.new(0, 14), Nerdword::Direction::HORIZONTAL),
+  Nerdword::Move.new("MEOW", Nerdword::Position.new(1, 12), Nerdword::Direction::HORIZONTAL),
+  Nerdword::Move.new("REJOINED", Nerdword::Position.new(6, 13), Nerdword::Direction::HORIZONTAL),
+  Nerdword::Move.new("CHEZ", Nerdword::Position.new(12, 11), Nerdword::Direction::VERTICAL),
+  Nerdword::Move.new("WACKO", Nerdword::Position.new(5, 3), Nerdword::Direction::VERTICAL),
+  Nerdword::Move.new("fUZES", Nerdword::Position.new(10, 14), Nerdword::Direction::HORIZONTAL),
+  Nerdword::Move.new("BEN", Nerdword::Position.new(9, 9), Nerdword::Direction::VERTICAL),
+  Nerdword::Move.new("SEX", Nerdword::Position.new(10, 4), Nerdword::Direction::VERTICAL),
+  Nerdword::Move.new("VAR", Nerdword::Position.new(10, 8), Nerdword::Direction::VERTICAL),
+  Nerdword::Move.new("GYRO", Nerdword::Position.new(4, 1), Nerdword::Direction::HORIZONTAL),
+  Nerdword::Move.new("DEaLT", Nerdword::Position.new(9, 1), Nerdword::Direction::HORIZONTAL),
+  Nerdword::Move.new("SIR", Nerdword::Position.new(11, 5), Nerdword::Direction::VERTICAL),
+  Nerdword::Move.new("IT", Nerdword::Position.new(13, 0), Nerdword::Direction::HORIZONTAL)
 ]
 
 clients = [player_1_client, player_2_client]
