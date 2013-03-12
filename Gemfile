@@ -9,11 +9,11 @@ gem 'letter'
 gem 'nerdword', :github => 'smartlogic/nerdword'
 gem 'pg'
 gem 'raddocs'
+gem 'thin'
 
 group :development do
   gem 'capybara'
   gem 'faraday'
-  gem 'thin'
 end
 
 group :development, :test do
